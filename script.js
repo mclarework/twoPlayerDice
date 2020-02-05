@@ -1,18 +1,33 @@
-let score = document.getElementsByTagName("p")[1]
-let roll = document.getElementsByTagName("p")[2]
+let score1 = document.getElementsByTagName("p")[1]
+let score2 = document.getElementsByTagName("p")[2]
+let roll = document.getElementsByTagName("p")[3]
 let button = document.getElementById("roller")
 let reset = document.getElementById("reset")
 let dice = document.getElementById("dice")
-let current = 0
+let current1 = 0
+let current2 = 0
+let turnTracker = 0
 
 document.addEventListener("click",(event)=> {
     if (event.target == button) {
-        let num = Math.ceil(Math.random()*6)
-        current+=num
-        score.textContent = `Your current score is ${current}`
+        let num = Math.ceil(Math.random()* 6)
+        if (turnTracker % 2 == 0) {
+            current1+=num
+        }else{
+            current2+=num
+        }
+        score1.textContent = `Player One's current score is ${current1}`
+        score2.textContent = `Player Two's current score is ${current2}`
         switch (true) {
             case num == 1:
-                roll.textContent = `You rolled a one! You lose. Better luck next time`
+                if (turnTracker % 2 == 0) {
+                    score1.textContent = "Player One, you lose!"
+                    score2.textContent = "Player Two, you win!"
+                }else{
+                    score1.textContent = "Player One, you win!"
+                    score2.textContent = "Player Two, you lose!"
+                }
+                roll.textContent = `You rolled a one!`
                 button.style.display = "none"
                 reset.style.display = "inline"
                 dice.style.backgroundImage = "url(img/dice1.png)"
@@ -39,10 +54,20 @@ document.addEventListener("click",(event)=> {
                 break
         }
     }
-    if (current >= 20) {
-        roll.textContent = `Congratulations! You have won with a score of ${current}.`
+    if (current1 >= 20) {
+        score1.textContent = `Congratulations! You have won with a score of ${current1}.`
         button.style.display = "none"
         reset.style.display = "inline"
+    }else if (current2 >= 20) {
+        score2.textContent = `Congratulations! You have won with a score of ${current2}.`
+        button.style.display = "none"
+        reset.style.display = "inline"
+    }
+    turnTracker++
+    if (turnTracker % 2 != 0) {
+        button.textContent = "Player Two: ROLL THE DICE"
+    }else{
+        button.textContent = "Player One: ROLL THE DICE"
     }
 })
 
